@@ -1,0 +1,330 @@
+/* ==========================================================================
+   실시간 점심메뉴 투표 스타일시트 (style.css)
+   ========================================================================== */
+
+/* 1. 글로벌 리셋 및 디자인 토큰(변수) 설정 */
+:root {
+    /* 대표 컬러 팔레트 */
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-hover-border: rgba(99, 102, 241, 0.6);
+    --card-selected-bg: rgba(99, 102, 241, 0.15);
+    --card-selected-border: #6366f1;
+
+    /* 텍스트 컬러 */
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    /* 강조 컬러 및 그라디언트 */
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    --primary-hover: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+    --progress-gradient: linear-gradient(90deg, #6366f1 0%, #ec4899 100%);
+
+    /* 그림자 및 라운딩 */
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 8px;
+    --shadow-glass: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. 문서 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 16px;
+}
+
+/* 3. 메인 컨테이너 (글래스모피즘 스타일) */
+.container {
+    width: 100%;
+    max-width: 680px;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-glass);
+    padding: 40px 32px;
+}
+
+/* 4. 헤더 영역 스타일 */
+.header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #a5b4fc;
+    margin-bottom: 12px;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header p {
+    color: var(--text-secondary);
+    font-size: 15px;
+}
+
+/* 5. 섹션 공통 타이틀 */
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+/* 6. 메뉴 선택 영역 (그리드 및 카드 스타일) */
+.menu-selection-section {
+    margin-bottom: 40px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 520px) {
+    .menu-grid {
+        grid-template-columns: 1fr; /* 모바일 환경에서는 1열 배치가 되도록 조절 */
+    }
+}
+
+/* 메뉴 카드 단일 요소 */
+.menu-card {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+}
+
+.menu-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--card-hover-border);
+    transform: translateY(-2px);
+}
+
+/* 선택된 메뉴 카드 스타일 */
+.menu-card.selected {
+    background: var(--card-selected-bg);
+    border-color: var(--card-selected-border);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+}
+
+.menu-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.menu-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.menu-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.menu-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* 라디오 인디케이터 (오른쪽 동그라미) */
+.radio-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--text-muted);
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.menu-card.selected .radio-indicator {
+    border-color: #818cf8;
+    background: #6366f1;
+    box-shadow: inset 0 0 0 3px #0f172a;
+}
+
+/* 7. 투표하기 버튼 스타일 */
+.action-area {
+    display: flex;
+    justify-content: center;
+}
+
+.vote-button {
+    width: 100%;
+    padding: 16px 24px;
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.vote-button:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(99, 102, 241, 0.4);
+}
+
+.vote-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.arrow-icon {
+    transition: transform 0.2s ease;
+}
+
+.vote-button:hover:not(:disabled) .arrow-icon {
+    transform: translateX(4px);
+}
+
+/* 8. 투표 결과 영역 스타일 */
+.results-section {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.results-header .section-title {
+    margin-bottom: 0;
+}
+
+.total-count-badge {
+    font-size: 14px;
+    font-weight: 500;
+    color: #a5b4fc;
+    background: rgba(99, 102, 241, 0.15);
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 결과 항목 레이아웃 */
+.result-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.result-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.item-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.item-stats {
+    color: var(--text-secondary);
+}
+
+.item-stats strong {
+    color: var(--text-primary);
+}
+
+/* 프로그레스 바 (막대 그래프) */
+.progress-bar-bg {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--progress-gradient);
+    border-radius: var(--radius-sm);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 9. 초기화 버튼 */
+.reset-area {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reset-button {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: var(--transition);
+    text-decoration: underline;
+}
+
+.reset-button:hover {
+    color: #ef4444;
+}

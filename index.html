@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실시간 메뉴 투표</title>
+    <!-- 외부 구글 폰트 적용 (Inter & Noto Sans KR) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- 스타일시트 연결 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- 메인 컨테이너: 전체 투표 앱을 감싸는 중앙 카드 영역 -->
+    <main class="container">
+        <!-- 헤더 영역: 서비스 제목과 안내 문구 -->
+        <header class="header">
+            <span class="badge">🍱 Lunch Vote</span>
+            <h1>오늘 뭐 먹지?</h1>
+            <p>원하는 메뉴를 선택하고 투표 버튼을 눌러 실시간 결과를 확인해보세요!</p>
+        </header>
+
+        <!-- 메뉴 선택 영역: 4가지 메뉴 카드 -->
+        <section class="menu-selection-section">
+            <h2 class="section-title">1. 메뉴 선택하기</h2>
+            <div class="menu-grid" id="menuGrid">
+                <!-- 비빔밥 카드 -->
+                <div class="menu-card" data-id="bibimbap">
+                    <div class="menu-icon">🥗</div>
+                    <div class="menu-info">
+                        <span class="menu-name">비빔밥</span>
+                        <span class="menu-desc">신선한 야채와 고소한 참기름</span>
+                    </div>
+                    <div class="radio-indicator"></div>
+                </div>
+
+                <!-- 삼겹살 카드 -->
+                <div class="menu-card" data-id="samgyeopsal">
+                    <div class="menu-icon">🥓</div>
+                    <div class="menu-info">
+                        <span class="menu-name">삼겹살</span>
+                        <span class="menu-desc">지글지글 고소하고 든든한 한 끼</span>
+                    </div>
+                    <div class="radio-indicator"></div>
+                </div>
+
+                <!-- 햄버거 카드 -->
+                <div class="menu-card" data-id="burger">
+                    <div class="menu-icon">🍔</div>
+                    <div class="menu-info">
+                        <span class="menu-name">햄버거</span>
+                        <span class="menu-desc">육즙 가득 패티와 바삭한 프라이</span>
+                    </div>
+                    <div class="radio-indicator"></div>
+                </div>
+
+                <!-- 떡볶이 카드 -->
+                <div class="menu-card" data-id="tteokbokki">
+                    <div class="menu-icon">🥘</div>
+                    <div class="menu-info">
+                        <span class="menu-name">떡볶이</span>
+                        <span class="menu-desc">매콤달콤 중독성 있는 국민 간식</span>
+                    </div>
+                    <div class="radio-indicator"></div>
+                </div>
+            </div>
+
+            <!-- 투표하기 버튼 영역 -->
+            <div class="action-area">
+                <button id="voteBtn" class="vote-button" disabled>
+                    <span>투표하기</span>
+                    <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- 결과 표시 영역: 실시간 투표 집계 현황 -->
+        <section class="results-section">
+            <div class="results-header">
+                <h2 class="section-title">2. 실시간 투표 현황</h2>
+                <div class="total-count-badge">
+                    총 투표수: <span id="totalVotes">0</span>표
+                </div>
+            </div>
+
+            <!-- 결과 항목 리스트 (자바스크립트를 통해 막대 그래프 및 수치 동적 업데이트) -->
+            <div class="results-list">
+                <!-- 비빔밥 결과 -->
+                <div class="result-item" id="result-bibimbap">
+                    <div class="result-label">
+                        <span class="item-name">🥗 비빔밥</span>
+                        <span class="item-stats"><strong class="count">0표</strong> (<span
+                                class="percent">0%</span>)</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- 삼겹살 결과 -->
+                <div class="result-item" id="result-samgyeopsal">
+                    <div class="result-label">
+                        <span class="item-name">🥓 삼겹살</span>
+                        <span class="item-stats"><strong class="count">0표</strong> (<span
+                                class="percent">0%</span>)</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- 햄버거 결과 -->
+                <div class="result-item" id="result-burger">
+                    <div class="result-label">
+                        <span class="item-name">🍔 햄버거</span>
+                        <span class="item-stats"><strong class="count">0표</strong> (<span
+                                class="percent">0%</span>)</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- 떡볶이 결과 -->
+                <div class="result-item" id="result-tteokbokki">
+                    <div class="result-label">
+                        <span class="item-name">🥘 떡볶이</span>
+                        <span class="item-stats"><strong class="count">0표</strong> (<span
+                                class="percent">0%</span>)</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 투표 데이터 초기화 버튼 -->
+            <div class="reset-area">
+                <button id="resetBtn" class="reset-button">투표 초기화</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 스크립트 연결 -->
+    <script src="script.js"></script>
+</body>
+
+</html>
